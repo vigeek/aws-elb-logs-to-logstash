@@ -14,3 +14,5 @@ s3cmd -and- jq
 # Ingesting CloudTrail logs
 See here:  https://github.com/vigeek/aws-cloudtrail-to-logstash
 
+# Example Dashboard (included)
+![alt tag](https://github.com/vigeek/aws-elb-logs-to-logstash/blob/master/kibana-dashboard/elb-kibana-dashboard.png)
