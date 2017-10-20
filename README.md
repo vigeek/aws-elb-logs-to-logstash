@@ -1,5 +1,5 @@
 # aws-elb-logs-to-logstash
-Consumes ELB logs and sends them to logstash for ingestion.
+Consumes AWS ELB (Elastic Load Balancer), NLB (Network Load Balancer), ALB (Application Load Balancer) logs from S3 and sends them to logstash for ingestion.  The logs are formatted through a LogStash filter. 
 
 # Requires
 s3cmd -and- jq
