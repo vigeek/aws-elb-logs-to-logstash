@@ -16,4 +16,5 @@ See here:  https://github.com/vigeek/aws-cloudtrail-to-logstash
 
 # Example Dashboard (included)
 ![alt tag](https://github.com/vigeek/aws-elb-logs-to-logstash/blob/master/kibana-dashboard/elb-kibana-dashboard.png)
+
 *Some minor details from the dashboard image are obfuscated.*
