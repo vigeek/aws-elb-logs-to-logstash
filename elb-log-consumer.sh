@@ -53,8 +53,13 @@ while true ; do
         echo $THE_FILE_LIST >> $TEMP_FILE
         s3cmd get $THE_FILE_LIST
         FILE_NAME="${THE_FILE_LIST##*/}"
-        cat $FILE_NAME >> $OUT_FILE
-        rm -f $FILE_NAME
+        if [[ $FILE_NAME == *.gz ]] ; then
+          nice -n 19 zcat $FILE_NAME >> $OUT_FILE
+          rm -f $FILE_NAME
+        else
+          nice -n 19 cat $FILE_NAME >> $OUT_FILE
+          rm -f $FILE_NAME
+        fi
       fi
     fi
     sleep 2
