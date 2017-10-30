@@ -1,0 +1,5 @@
+# Basic monit configuratino file
+check process elb-consumer
+  with pidfile  /var/run/elb-consumer.pid
+  start program "/etc/init.d/elb-consumer-init.sh start"
+  stop program "/etc/init.d/elb-consumer-init.sh stop"
