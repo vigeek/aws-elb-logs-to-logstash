@@ -5,6 +5,7 @@ In Kibana, go to settings, objects and then select import.
 This dashboard and visualizations assume your index name is: aws-logs-*
 
 To switch the index naming to logstash-* run the following against the dashboard json files:
+
 `sed -i 's/aws-logs-*/logstash-*/g' *.json`
 
 # Partial screen shot
