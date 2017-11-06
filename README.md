@@ -11,6 +11,16 @@ s3cmd -and- jq
 3. Ensure your AWS credentials are configured (e.g:  ~/.aws/credentials)
 4. Execute the script (it will run in a constant loop)
 
+# Configuration extended.
+Included is a traditional init script and monit config (optional), to use the init script...
+
+1. Ensure 'elb-log-consumer.sh' is located here:  /opt/elb-consumer
+2. Alternatively, edit 'elb-consumer-init.sh' and change variable 'THE_PATH'
+3. Place the init script[elb-consumer-init.sh] in /etc/init.d
+4. Make init script executable:  chmod ug+x elb-consumer-init.sh
+5. It can then be started as such:  /etc/init.d/elb-consumer-init.sh start (or stop)
+6. The included monit script can be placed in your monits configuration directory and used to control the ELB consumer.
+
 # Ingesting CloudTrail logs
 See here:  https://github.com/vigeek/aws-cloudtrail-to-logstash
 
