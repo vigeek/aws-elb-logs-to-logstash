@@ -8,8 +8,9 @@ s3cmd -and- jq
 
 1. Edit the script and update variable 'AWS_ACCOUNT_NUMBER' with your account number.
 2. Edit the script and update variable 'S3_BUCKET_NAME' with your buckets name.
-3. Ensure your AWS credentials are configured (e.g:  ~/.aws/credentials)
-4. Execute the script (it will run in a constant loop)
+3. If your bucket is nested (e.g: loadbalancer-logs/AWSLogs/service/AWSLogs) set S3_BUCKET_NAME to "loadbalancer-logs/AWSLogs"
+4. Ensure your AWS credentials are configured (e.g:  ~/.aws/credentials)
+5. Execute the script (it will run in a constant loop)
 
 # Configuration extended.
 Included is a traditional init script and monit config (optional), to use the init script...
