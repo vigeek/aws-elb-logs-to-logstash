@@ -1,5 +1,6 @@
 # ELB Logs Consumer
-# Russ Thompson 2016.
+# Russ Thompson 2016
+# Updated:  June 2018.
 # Requires: s3cmd
 
 # Check interval, how often to pause in between checks
@@ -12,20 +13,28 @@ TEMP_FILE="/tmp/elb-tmp"
 OUT_FILE="/var/log/ingested-elb-logs.log"
 
 # Define the bucket where cloudtrail logs are beint sent to.
-S3_BUCKET_NAME="ck-loadbalancer-logs"
+S3_BUCKET_NAME="my-loadbalancer-logs"
 
 # Define the numerical number that resepresents your AWS account.
 AWS_ACCOUNT_NUMBER="44444444444444"
 
+# Maximum number of bytes before removing the top half of lines. (default:  200Mb).
+FILE_MAX_BS="200000000"
 
-# Check growth of file. 
-# Rather than rotate, just keep them relatively small.
+# Check growth of file. When it exceeds the "FILE_MAX_BS", trim it in half by removing the oldest entries.
+# Older entries should have already been ingested by logstash.
 function check_file_growth {
-  if [ "$(wc -l $TEMP_FILE | awk '{print $1}')" -gt "350" ] ; then
-    sed -i '1,100d' $TEMP_FILE
+  # Cut the file in half if large
+  if [ "$(du -b $OUT_FILE | awk '{print $1}')" -gt "$FILE_MAX_BS" ] ; then
+    CURRENT_LENGTH="$(wc -l $OUT_FILE | awk '{print $1}')"
+    DESIRED_LENGTH="$(($CURRENT_LENGTH / 2))"
+    nice -n 0 sed -i '1,'$DESIRED_LENGTH'd' $OUT_FILE
+    sleep 1
   fi
-  if [ "$(wc -l $OUT_FILE | awk '{print $1}')" -gt "5000" ] ; then
-    sed -i '1,1000d' $OUT_FILE
+  # The remporary file should remain small as proccessed entries to get placed in the "OUT_FILE"
+  if [ "$(wc -l $TEMP_FILE | awk '{print $1}')" -gt "1000" ] ; then
+    nice -n 0 sed -i '1,200d' $TEMP_FILE
+    sleep 1
   fi
 }
 
@@ -53,6 +62,7 @@ while true ; do
         echo $THE_FILE_LIST >> $TEMP_FILE
         s3cmd get $THE_FILE_LIST
         FILE_NAME="${THE_FILE_LIST##*/}"
+        # Should the extension end in ".gz" it's an ALB style log.
         if [[ $FILE_NAME == *.gz ]] ; then
           nice -n 19 zcat $FILE_NAME >> $OUT_FILE
           rm -f $FILE_NAME
